@@ -67,8 +67,7 @@ function getPicker({
 function timeZoneOffsetDateSetter(date, timeZoneOffsetInMinutes) {
   let localDate = date;
   if (typeof timeZoneOffsetInMinutes === 'number') {
-    const offset =
-      localDate.getTimezoneOffset() * MIN_MS + timeZoneOffsetInMinutes * MIN_MS;
+    const offset = timeZoneOffsetInMinutes * MIN_MS;
     localDate = new Date(date.getTime() - offset);
   }
   return localDate;
@@ -120,14 +119,13 @@ export default function RNDateTimePicker(props: AndroidNativeProps) {
 
           switch (action) {
             case DATE_SET_ACTION:
-              date.setFullYear(year, month, day);
-              date = timeZoneOffsetDateSetter(date, timeZoneOffsetInMinutes);
+              date.setUTCFullYear(year, month, day);
               event.nativeEvent.timestamp = date;
               onChange(event, date);
               break;
 
             case TIME_SET_ACTION:
-              date.setHours(hour, minute);
+              date.setUTCHours(hour, minute);
               date = timeZoneOffsetDateSetter(date, timeZoneOffsetInMinutes);
               event.nativeEvent.timestamp = date;
               onChange(event, date);
